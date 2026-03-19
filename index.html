@@ -1311,11 +1311,149 @@
     @media (max-width: 640px) {
       #logPanel { width: 100%; border-radius: 0; top: var(--topbar-h); }
     }
+
+    /* ═══════════════════════════════════════════════
+       TELA DE LOGIN
+    ═══════════════════════════════════════════════ */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+
+    #loginScreen.hidden { display: none; }
+
+    .login-box {
+      width: 100%; max-width: 380px;
+      background: var(--surf);
+      border: 1px solid var(--bdr);
+      border-radius: 12px;
+      box-shadow: var(--shadow-xl);
+      padding: 36px 32px 28px;
+      display: flex; flex-direction: column; gap: 24px;
+      animation: mIn .3s cubic-bezier(.16,1,.3,1);
+    }
+
+    .login-header { text-align: center; }
+
+    .login-logo {
+      width: 52px; height: 52px;
+      background: var(--blue);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 0 24px rgba(59,130,246,.4);
+    }
+
+    .login-logo svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .login-title { font-size: 22px; font-weight: 800; color: var(--t1); letter-spacing: -.5px; }
+    .login-sub   { font-size: 13px; color: var(--t2); margin-top: 4px; }
+
+    .login-fields { display: flex; flex-direction: column; gap: 12px; }
+
+    .lf-group { display: flex; flex-direction: column; gap: 5px; }
+    .lf-label { font-size: 12px; font-weight: 700; color: var(--t2); text-transform: uppercase; letter-spacing: .06em; }
+
+    .lf-input {
+      height: 44px; padding: 0 14px;
+      background: var(--surf2);
+      border: 1.5px solid var(--bdr);
+      border-radius: var(--r-sm);
+      font: 600 14px var(--font);
+      color: var(--t1); outline: none;
+      transition: all var(--transition);
+    }
+
+    .lf-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-l); background: var(--surf); }
+    .lf-input.error { border-color: var(--c-ris); box-shadow: 0 0 0 3px rgba(239,68,68,.15); }
+
+    .login-error {
+      font-size: 12px; font-weight: 600; color: var(--c-ris);
+      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.2);
+      border-radius: var(--r-sm); padding: 10px 14px;
+      display: none;
+    }
+
+    .login-error.visible { display: block; }
+
+    .btn-login {
+      height: 46px; border: none; border-radius: var(--r-sm);
+      background: var(--blue); color: #fff;
+      font: 700 14px var(--font); cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: 0 4px 16px rgba(59,130,246,.35);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+
+    .btn-login:hover:not(:disabled) { background: var(--blue-d); box-shadow: 0 6px 20px rgba(59,130,246,.45); transform: translateY(-1px); }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-login svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.5; }
+
+    .login-footer { font-size: 11px; color: var(--t3); text-align: center; }
+
+    /* APP OCULTO até login */
+    #appRoot { display: none; }
+    #appRoot.visible { display: flex; }
+
+    /* LOGOUT btn */
+    .btn-logout {
+      height: 30px; padding: 0 12px;
+      border: 1px solid var(--bdr); border-radius: var(--r-sm);
+      background: transparent; color: var(--t2);
+      font: 600 12px var(--font); cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: all var(--transition); white-space: nowrap;
+    }
+
+    .btn-logout:hover { border-color: var(--c-ris); color: var(--c-ris); background: rgba(239,68,68,.06); }
+    .btn-logout svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+    /* LOG item — mostrar usuário para admin */
+    .log-user { font-size: 10px; font-weight: 700; color: var(--blue); }
   </style>
 </head>
 <body>
 
-<div class="layout">
+<!-- ═══ TELA DE LOGIN ══════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="login-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="login-title">CPJ</div>
+      <div class="login-sub">Sistema de Gestão Jurídica</div>
+    </div>
+
+    <div class="login-fields">
+      <div class="lf-group">
+        <label class="lf-label" for="loginUser">Usuário</label>
+        <input class="lf-input" id="loginUser" type="text" autocomplete="username"
+          placeholder="Seu usuário" oninput="clearLoginError()">
+      </div>
+      <div class="lf-group">
+        <label class="lf-label" for="loginPass">Senha</label>
+        <input class="lf-input" id="loginPass" type="password" autocomplete="current-password"
+          placeholder="••••••••" oninput="clearLoginError()"
+          onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+    </div>
+
+    <div class="login-error" id="loginError"></div>
+
+    <button class="btn-login" id="btnLogin" onclick="doLogin()">
+      <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Entrar
+    </button>
+
+    <div class="login-footer">Acesso restrito · CPJ © 2025</div>
+  </div>
+</div>
+
+<!-- ═══ APLICAÇÃO PRINCIPAL ════════════════════════════ -->
+<div id="appRoot" class="layout">
 
   <!-- ═══ SIDEBAR ═══════════════════════════════════ -->
   <nav class="sb" id="sidebar">
@@ -1348,12 +1486,16 @@
           <div class="sync-time" id="syncTime">—</div>
         </div>
       </div>
-      <div class="sb-user" onclick="toggleTheme()">
-        <div class="sb-avatar">JU</div>
+      <div class="sb-user">
+        <div class="sb-avatar" id="sbAvatarText">—</div>
         <div class="sb-user-info">
-          <div class="sb-user-name">Jurídico</div>
-          <div class="sb-user-role">Administrador</div>
+          <div class="sb-user-name" id="sbUserName">—</div>
+          <div class="sb-user-role" id="sbUserRole">—</div>
         </div>
+      </div>
+      <div class="sync-item" onclick="doLogout()" title="Sair" style="cursor:pointer">
+        <svg style="width:16px;height:16px;fill:none;stroke:rgba(255,255,255,.4);stroke-width:2;stroke-linecap:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <div class="sync-info"><div class="sync-status">Sair</div><div class="sync-time">Encerrar sessão</div></div>
       </div>
     </div>
   </nav>
@@ -1380,6 +1522,10 @@
         </div>
         <button class="icon-btn" onclick="doRefresh()" title="Atualizar dados">
           <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+        <button class="btn-logout" onclick="doLogout()">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sair
         </button>
         <button class="btn-primary" onclick="openSmartPanel('NEW')">
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1459,7 +1605,7 @@
           <div class="search-wrap">
             <svg class="search-ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input type="text" class="search-inp" id="searchInput"
-              placeholder="Pesquisar"
+              placeholder="Buscar por nome, CPF/CNPJ, sigla ou pasta..."
               oninput="this.value=this.value.toUpperCase(); onSearchInput(this)">
             <button class="search-clear" id="searchClear" onclick="clearSearch()">
               <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1563,7 +1709,7 @@
 
     </div><!-- /page -->
   </div><!-- /main -->
-</div><!-- /layout -->
+</div><!-- /layout = appRoot -->
 
 <!-- BOTTOM NAV (mobile) -->
 <nav class="mob-nav">
@@ -1746,12 +1892,16 @@
   const API = 'https://script.google.com/macros/s/AKfycbzNT1FoJM3pEiHpsp41q1jUR7RFMeAL7ZKFdS1PXNQ8KTgxnmK-JdnWBtLQsQL0eQaw/exec';
 
   /* ═══════════════════════════════════════════
+     SESSÃO
+  ═══════════════════════════════════════════ */
+  let session = null; // { usuario, nome, perfil }
+
+  /* ═══════════════════════════════════════════
      STATE
   ═══════════════════════════════════════════ */
   let db = [], filterType = 'TODOS', sortCol = 'pasta', sortAsc = true;
   let currentMode = 'NEW', pendingDel = null;
   let currentView = 'table';
-  let sidebarCollapsed = false;
 
   const SM = {
     'ESTÁVEL':   { cls: 's01', ord: 1 },
@@ -1810,6 +1960,90 @@
   }
 
   /* ═══════════════════════════════════════════
+     LOGIN / LOGOUT
+  ═══════════════════════════════════════════ */
+  function clearLoginError() {
+    document.getElementById('loginError').classList.remove('visible');
+    document.getElementById('loginUser').classList.remove('error');
+    document.getElementById('loginPass').classList.remove('error');
+  }
+
+  function showLoginError(msg) {
+    const el = document.getElementById('loginError');
+    el.textContent = msg;
+    el.classList.add('visible');
+    document.getElementById('loginUser').classList.add('error');
+    document.getElementById('loginPass').classList.add('error');
+  }
+
+  async function doLogin() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+
+    if (!user || !pass) { showLoginError('Preencha usuário e senha.'); return; }
+
+    const btn = document.getElementById('btnLogin');
+    btn.disabled = true; btn.textContent = 'Verificando...';
+
+    try {
+      const r = await fetch(API, {
+        method: 'POST', redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'login', usuario: user, senha: pass })
+      });
+      const j = await r.json();
+      if (j.ok) {
+        session = { usuario: j.usuario, nome: j.nome, perfil: j.perfil };
+        sessionStorage.setItem('cpj-session', JSON.stringify(session));
+        startApp();
+      } else {
+        showLoginError(j.error || 'Usuário ou senha inválidos.');
+      }
+    } catch (err) {
+      showLoginError('Erro de conexão. Verifique a internet.');
+    }
+
+    btn.disabled = false; btn.textContent = 'Entrar';
+    // Restore inner with svg
+    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>Entrar`;
+  }
+
+  function startApp() {
+    document.getElementById('loginScreen').classList.add('hidden');
+    const app = document.getElementById('appRoot');
+    app.classList.add('visible');
+
+    // Popula dados do usuário na sidebar e topbar
+    const initials = (session.nome || '—').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    document.getElementById('sbAvatarText').textContent = initials;
+    document.getElementById('sbUserName').textContent   = session.nome;
+    document.getElementById('sbUserRole').textContent   = session.perfil.charAt(0) + session.perfil.slice(1).toLowerCase();
+
+    // Atualiza painel de logs com título correto
+    const lpTitle = document.querySelector('.lp-title');
+    if (lpTitle) {
+      lpTitle.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        ${session.perfil === 'ADMINISTRADOR' ? 'Atividade de Todos' : 'Minha Atividade'}`;
+    }
+
+    fetchLogs();
+    apiGet();
+    initViewMode();
+  }
+
+  function doLogout() {
+    sessionStorage.removeItem('cpj-session');
+    session = null;
+    logsCache = [];
+    db = [];
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('appRoot').classList.remove('visible');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    clearLoginError();
+  }
+
+  /* ═══════════════════════════════════════════
      SYNC STATE
   ═══════════════════════════════════════════ */
   function setSyncState(state, txt, sub) {
@@ -1857,12 +2091,10 @@
   }
 
   /* ═══════════════════════════════════════════
-     LOGS DE ATIVIDADE — compartilhado via Google Sheets
-     (GAS precisa suportar action:'addLog' e action:'getLogs')
-     Fallback: localStorage para offline/erro
+     LOGS DE ATIVIDADE — Compartilhado via Google Sheets
   ═══════════════════════════════════════════ */
   const LOGS_FALLBACK = 'cpj-logs-fb';
-  let logsOpen = false;
+  let logsOpen  = false;
   let logsCache = [];
 
   function fmtDateTime(d) {
@@ -1870,50 +2102,52 @@
   }
 
   async function addLog(type, name) {
-    const entry = { type, name, ts: new Date().toISOString() };
-    // Optimistic: add locally first
+    if (!session) return;
+    const entry = {
+      type,
+      name,
+      usuario:     session.usuario,
+      nomeUsuario: session.nome,
+      perfil:      session.perfil,
+      ts: new Date().toISOString()
+    };
     logsCache.unshift(entry);
-    if (logsCache.length > 100) logsCache.pop();
+    if (logsCache.length > 200) logsCache.pop();
     updateLogBadge(logsCache.length);
     if (logsOpen) renderLogs();
-    // Persist to Sheets (fire-and-forget)
     try {
       await fetch(API, {
         method: 'POST', redirect: 'follow',
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ action: 'addLog', log: entry })
       });
-    } catch {
-      // Fallback: save to localStorage
-      saveFallbackLog(entry);
-    }
+    } catch { saveFallbackLog(entry); }
   }
 
   function saveFallbackLog(entry) {
     try {
       const arr = JSON.parse(localStorage.getItem(LOGS_FALLBACK) || '[]');
-      arr.unshift(entry);
-      if (arr.length > 100) arr.pop();
+      arr.unshift(entry); if (arr.length > 100) arr.pop();
       localStorage.setItem(LOGS_FALLBACK, JSON.stringify(arr));
     } catch {}
   }
 
   async function fetchLogs() {
+    if (!session) return;
     try {
-      const r = await fetch(API + '?action=getLogs&t=' + Date.now(), { redirect: 'follow' });
+      const url = `${API}?action=getLogs&usuario=${encodeURIComponent(session.usuario)}&perfil=${encodeURIComponent(session.perfil)}&t=${Date.now()}`;
+      const r = await fetch(url, { redirect: 'follow' });
       const j = await r.json();
       if (j.ok && Array.isArray(j.logs)) {
-        logsCache = j.logs.slice(0, 100);
+        logsCache = j.logs.slice(0, 200);
         updateLogBadge(logsCache.length);
         return;
       }
     } catch {}
-    // Fallback: merge localStorage
+    // Fallback localStorage
     try {
       const fb = JSON.parse(localStorage.getItem(LOGS_FALLBACK) || '[]');
-      logsCache = [...fb, ...logsCache]
-        .sort((a,b) => new Date(b.ts) - new Date(a.ts))
-        .slice(0, 100);
+      logsCache = [...fb, ...logsCache].sort((a,b)=>new Date(b.ts)-new Date(a.ts)).slice(0,100);
     } catch {}
     updateLogBadge(logsCache.length);
   }
@@ -1921,12 +2155,8 @@
   function updateLogBadge(count) {
     const badge = document.getElementById('logBadge');
     if (!badge) return;
-    if (count > 0) {
-      badge.style.display = 'flex';
-      badge.textContent = count > 99 ? '99+' : count;
-    } else {
-      badge.style.display = 'none';
-    }
+    if (count > 0) { badge.style.display = 'flex'; badge.textContent = count > 99 ? '99+' : count; }
+    else badge.style.display = 'none';
   }
 
   function renderLogs() {
@@ -1941,12 +2171,16 @@
       edit: { ico: '✎', cls: 'log-edit', label: 'Editado'    },
       del:  { ico: '✕', cls: 'log-del',  label: 'Excluído'   },
     };
+    const isAdmin = session && session.perfil === 'ADMINISTRADOR';
     list.innerHTML = logsCache.map(l => {
-      const m = icons[l.type] || icons.add;
+      const m  = icons[l.type] || icons.add;
       const dt = fmtDateTime(new Date(l.ts));
+      const userLine = isAdmin && l.nomeUsuario
+        ? `<span class="log-user">👤 ${esc(l.nomeUsuario)}</span>` : '';
       return `<div class="log-item">
         <div class="log-ico ${m.cls}">${m.ico}</div>
         <div class="log-info">
+          ${userLine}
           <span class="log-action">${m.label}</span>
           <span class="log-name">${esc(l.name)}</span>
           <span class="log-ts">${dt}</span>
@@ -1960,13 +2194,11 @@
     const panel = document.getElementById('logPanel');
     if (!panel) return;
     panel.classList.toggle('on', logsOpen);
-    if (logsOpen) {
-      await fetchLogs();
-      renderLogs();
-    }
+    if (logsOpen) { await fetchLogs(); renderLogs(); }
   }
 
   async function clearLogs() {
+    if (!session) return;
     logsCache = [];
     localStorage.removeItem(LOGS_FALLBACK);
     updateLogBadge(0);
@@ -1975,7 +2207,7 @@
       await fetch(API, {
         method: 'POST', redirect: 'follow',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ action: 'clearLogs' })
+        body: JSON.stringify({ action: 'clearLogs', usuario: session.usuario, perfil: session.perfil })
       });
     } catch {}
   }
@@ -2121,9 +2353,7 @@
       const vn = parseFloat(c.valor_num) || 0;
       const pct = Math.min(100, Math.max(0, parseFloat(c.exito_num) || 0));
       const pf = c.pasta ? String(c.pasta) : '';
-      let pctColor = 'var(--c-att)';
-      if (pct = 0) pctColor = 'var(--c-ris)';
-      if (pct >= 1) pctColor = 'var(--c-ok)';
+      const pctColor = pct === 0 ? 'var(--c-ris)' : 'var(--c-att)';
 
       return `<tr onclick="openSmartPanel('VIEW','${esc(c.id)}')">
         <td class="center" data-label="PASTA"><span class="cell-pasta">${pf ? esc(pf) : D}</span></td>
@@ -2143,9 +2373,7 @@
       const sm = SM[c.status] || { cls: 's05', ord: 9 };
       const vn = parseFloat(c.valor_num) || 0;
       const pct = Math.min(100, Math.max(0, parseFloat(c.exito_num) || 0));
-      let pctColor = 'var(--c-att)';
-      if (pct < 30) pctColor = 'var(--c-ris)';
-      if (pct >= 60) pctColor = 'var(--c-ok)';
+      const pctColor = pct === 0 ? 'var(--c-ris)' : 'var(--c-att)';
 
       return `<div class="client-card" onclick="openSmartPanel('VIEW','${esc(c.id)}')">
         <div class="cc-header">
@@ -2467,17 +2695,9 @@
   });
 
   /* ═══════════════════════════════════════════
-     INIT
+     INIT VIEW MODE (chamado após login)
   ═══════════════════════════════════════════ */
-  (function init() {
-    /* Theme */
-    const saved = localStorage.getItem('cpj-theme');
-    if (saved) document.documentElement.setAttribute('data-theme', saved);
-
-    /* Logs: carrega do servidor na init */
-    fetchLogs();
-
-    /* Mobile: força card view */
+  function initViewMode() {
     if (window.innerWidth <= 640) {
       currentView = 'grid';
       document.getElementById('tableContainer').style.display = 'none';
@@ -2487,13 +2707,35 @@
       if (mnT) mnT.classList.remove('on');
       if (mnC) mnC.classList.add('on');
     } else {
+      currentView = 'table';
+      document.getElementById('tableContainer').style.display = '';
+      document.getElementById('cardGrid').style.display = 'none';
       const mnT = document.getElementById('mn-tabela');
       if (mnT) mnT.classList.add('on');
     }
-
     setSort('pasta');
+  }
 
-    apiGet();
+  /* ═══════════════════════════════════════════
+     INIT — tema + revalidar sessão existente
+  ═══════════════════════════════════════════ */
+  (function init() {
+    /* Tema */
+    const saved = localStorage.getItem('cpj-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+
+    /* Se recarregar aba com sessão ativa, retoma direto */
+    try {
+      const s = JSON.parse(sessionStorage.getItem('cpj-session') || 'null');
+      if (s && s.usuario && s.perfil) {
+        session = s;
+        startApp();
+        return;
+      }
+    } catch {}
+
+    /* Sem sessão — mostra tela de login */
+    document.getElementById('loginScreen').classList.remove('hidden');
   })();
 </script>
 <!-- ═══ LOG PANEL ══════════════════════════ -->
