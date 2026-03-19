@@ -436,6 +436,13 @@
       flex-wrap: wrap;
     }
 
+    /* Row3 mobile: limpar fica embaixo */
+    .toolbar-row3 {
+      display: none;
+      padding: 0 14px 10px;
+      border-top: none;
+    }
+
     /* SEARCH */
     .search-wrap {
       position: relative; flex: 1; min-width: 200px;
@@ -508,46 +515,36 @@
     .filter-select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-l); }
     .filter-select:has(:not(option[value=""]:checked)) { border-color: var(--blue); color: var(--blue); background: var(--blue-l); }
 
-    /* STATUS PILLS */
-    .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    /* STATUS PILLS — tamanho uniforme */
+    .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
     .fp {
-      height: 28px; padding: 0 12px;
+      height: 30px; padding: 0 14px;
+      min-width: 88px;
       border-radius: var(--r-pill);
       border: 1px solid var(--bdr);
       background: transparent;
-      font: 600 11px var(--font);
-      text-transform: uppercase; letter-spacing: .04em;
+      font: 600 12px var(--font);
       color: var(--t2); cursor: pointer;
       transition: all var(--transition);
-      display: inline-flex; align-items: center; gap: 5px;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      white-space: nowrap; flex-shrink: 0;
     }
 
     .fp:hover { border-color: var(--bdr2); background: var(--surf2); color: var(--t1); }
-
     .fp.on { background: var(--blue-l); color: var(--blue); border-color: var(--blue-b); font-weight: 700; }
-
     .fp-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-
-    .fp-cnt {
-      background: rgba(255,255,255,.1); color: inherit;
-      font-size: 10px; padding: 1px 5px; border-radius: 99px; font-weight: 700;
-    }
-
-    [data-theme="light"] .fp-cnt { background: rgba(0,0,0,.08); }
-    .fp.on .fp-cnt { background: rgba(59,130,246,.2); }
 
     /* TOOLBAR RIGHT */
     .toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 
-    .rec-count { font-size: 12px; font-weight: 600; color: var(--t2); white-space: nowrap; }
-    .rec-count strong { color: var(--t1); font-weight: 700; }
+    /* VIEW TOGGLE no row1 */
+    .toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
     .view-toggle { display: flex; gap: 2px; background: var(--surf2); border: 1px solid var(--bdr); border-radius: var(--r-sm); padding: 2px; }
 
     .vt-btn {
-      width: 28px; height: 28px;
+      width: 32px; height: 32px;
       border-radius: var(--r-xs); border: none;
       background: transparent; color: var(--t3);
       display: flex; align-items: center; justify-content: center;
@@ -555,7 +552,7 @@
     }
 
     .vt-btn.on { background: var(--surf); color: var(--t1); box-shadow: var(--shadow-xs); }
-    .vt-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .vt-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; }
 
     /* FILTER ACTIVE BADGE */
     .filter-tag {
@@ -577,21 +574,30 @@
 
     /* BTN LIMPAR FILTROS */
     .btn-clear {
-      height: 28px; padding: 0 10px;
+      height: 30px; padding: 0 12px;
       border-radius: var(--r-pill);
       border: 1px solid rgba(239,68,68,.3);
       background: transparent;
-      font: 700 11px var(--font);
-      text-transform: uppercase; letter-spacing: .04em;
+      font: 700 12px var(--font);
       color: var(--c-ris); cursor: pointer;
       transition: all var(--transition);
-      display: none; align-items: center; gap: 5px;
+      display: none; align-items: center; gap: 6px;
       white-space: nowrap; flex-shrink: 0;
     }
 
     .btn-clear.visible { display: inline-flex; }
     .btn-clear:hover { background: rgba(239,68,68,.08); border-color: var(--c-ris); }
     .btn-clear svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.5; }
+
+    /* Inline (desktop): fica no canto direito da row2 */
+    .btn-clear-inline { margin-left: auto; }
+
+    /* Mobile: full width abaixo das pills */
+    .btn-clear-mobile {
+      width: 100%; justify-content: center;
+      height: 36px; border-radius: var(--r-sm);
+      font-size: 13px;
+    }
 
     /* ═══════════════════════════════════════════════
        TABELA AVANÇADA
@@ -1183,6 +1189,11 @@
 
       .fg.c2, .fg.c3, .fg.c4 { grid-template-columns: 1fr; gap: 10px; }
 
+      /* Esconde botão inline, mostra row3 abaixo das pills */
+      .btn-clear-inline { display: none !important; }
+      .toolbar-row3 { display: block; }
+      .toolbar-row3 .btn-clear { width: 100%; justify-content: center; }
+
       .mbd { padding: 14px; max-height: calc(100vh - 120px); }
       .mh { padding: 12px 14px; }
       .mf { padding: 12px 14px; gap: 6px; }
@@ -1325,6 +1336,7 @@
       <div class="si on" title="Clientes">
         <svg class="si-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span class="si-label">Clientes</span>
+        <span class="si-badge" id="navBadge">—</span>
       </div>
     </div>
 
@@ -1391,7 +1403,7 @@
             <div class="ki-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
           </div>
           <div class="ki-val" id="kTotal">—</div>
-          <div class="ki-footer"><span class="ki-trend-lbl">Ativos</span></div>
+          <div class="ki-footer"><span class="ki-trend-lbl">Ativos (sem cancelados)</span></div>
         </div>
 
         <div class="ki" style="--ki-accent:#8B5CF6;--ki-icon-bg:rgba(139,92,246,.1)">
@@ -1442,6 +1454,7 @@
 
       <!-- TOOLBAR AVANÇADA -->
       <div class="toolbar-card">
+        <!-- ROW 1: busca + view toggle -->
         <div class="toolbar-row1">
           <div class="search-wrap">
             <svg class="search-ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1452,7 +1465,6 @@
               <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
-
           <div class="toolbar-right">
             <div class="view-toggle">
               <button class="vt-btn on" id="vt-table" onclick="setView('table')" title="Tabela">
@@ -1465,7 +1477,7 @@
           </div>
         </div>
 
-        <!-- ROW 2: STATUS PILLS + VIEW TOGGLE + LIMPAR -->
+        <!-- ROW 2: pills + limpar (desktop) -->
         <div class="toolbar-row2">
           <div class="filter-pills">
             <button class="fp on" onclick="applyFilter('TODOS',this)" id="fp-todos">Todos</button>
@@ -1485,13 +1497,19 @@
               <span class="fp-dot" style="background:var(--c-can)"></span>Cancelado
             </button>
           </div>
+          <!-- limpar visível no desktop inline -->
+          <button class="btn-clear btn-clear-inline" id="btnClear" onclick="clearAllFilters()">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Limpar
+          </button>
+        </div>
 
-          <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0">
-            <button class="btn-clear" id="btnClear" onclick="clearAllFilters()">
-              <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              Limpar
-            </button>
-          </div>
+        <!-- ROW 3: limpar isolado no mobile -->
+        <div class="toolbar-row3" id="toolbarRow3">
+          <button class="btn-clear btn-clear-mobile" onclick="clearAllFilters()">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Limpar filtros
+          </button>
         </div>
       </div>
 
@@ -1839,34 +1857,82 @@
   }
 
   /* ═══════════════════════════════════════════
-     LOGS DE ATIVIDADE
+     LOGS DE ATIVIDADE — compartilhado via Google Sheets
+     (GAS precisa suportar action:'addLog' e action:'getLogs')
+     Fallback: localStorage para offline/erro
   ═══════════════════════════════════════════ */
-  const LOGS_KEY = 'cpj-logs';
+  const LOGS_FALLBACK = 'cpj-logs-fb';
   let logsOpen = false;
+  let logsCache = [];
 
   function fmtDateTime(d) {
     return d.toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
   }
 
-  function addLog(type, name) {
-    const logs = getLogs();
-    logs.unshift({ type, name, ts: new Date().toISOString() });
-    if (logs.length > 100) logs.pop();
-    localStorage.setItem(LOGS_KEY, JSON.stringify(logs));
-    renderLogs();
-    const badge = document.getElementById('logBadge');
-    if (badge) { badge.style.display = 'flex'; badge.textContent = Math.min(99, logs.length); }
+  async function addLog(type, name) {
+    const entry = { type, name, ts: new Date().toISOString() };
+    // Optimistic: add locally first
+    logsCache.unshift(entry);
+    if (logsCache.length > 100) logsCache.pop();
+    updateLogBadge(logsCache.length);
+    if (logsOpen) renderLogs();
+    // Persist to Sheets (fire-and-forget)
+    try {
+      await fetch(API, {
+        method: 'POST', redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'addLog', log: entry })
+      });
+    } catch {
+      // Fallback: save to localStorage
+      saveFallbackLog(entry);
+    }
   }
 
-  function getLogs() {
-    try { return JSON.parse(localStorage.getItem(LOGS_KEY) || '[]'); } catch { return []; }
+  function saveFallbackLog(entry) {
+    try {
+      const arr = JSON.parse(localStorage.getItem(LOGS_FALLBACK) || '[]');
+      arr.unshift(entry);
+      if (arr.length > 100) arr.pop();
+      localStorage.setItem(LOGS_FALLBACK, JSON.stringify(arr));
+    } catch {}
+  }
+
+  async function fetchLogs() {
+    try {
+      const r = await fetch(API + '?action=getLogs&t=' + Date.now(), { redirect: 'follow' });
+      const j = await r.json();
+      if (j.ok && Array.isArray(j.logs)) {
+        logsCache = j.logs.slice(0, 100);
+        updateLogBadge(logsCache.length);
+        return;
+      }
+    } catch {}
+    // Fallback: merge localStorage
+    try {
+      const fb = JSON.parse(localStorage.getItem(LOGS_FALLBACK) || '[]');
+      logsCache = [...fb, ...logsCache]
+        .sort((a,b) => new Date(b.ts) - new Date(a.ts))
+        .slice(0, 100);
+    } catch {}
+    updateLogBadge(logsCache.length);
+  }
+
+  function updateLogBadge(count) {
+    const badge = document.getElementById('logBadge');
+    if (!badge) return;
+    if (count > 0) {
+      badge.style.display = 'flex';
+      badge.textContent = count > 99 ? '99+' : count;
+    } else {
+      badge.style.display = 'none';
+    }
   }
 
   function renderLogs() {
     const list = document.getElementById('logList');
     if (!list) return;
-    const logs = getLogs();
-    if (!logs.length) {
+    if (!logsCache.length) {
       list.innerHTML = '<div class="log-empty">Nenhuma atividade registrada ainda.</div>';
       return;
     }
@@ -1875,7 +1941,7 @@
       edit: { ico: '✎', cls: 'log-edit', label: 'Editado'    },
       del:  { ico: '✕', cls: 'log-del',  label: 'Excluído'   },
     };
-    list.innerHTML = logs.map(l => {
+    list.innerHTML = logsCache.map(l => {
       const m = icons[l.type] || icons.add;
       const dt = fmtDateTime(new Date(l.ts));
       return `<div class="log-item">
@@ -1889,23 +1955,33 @@
     }).join('');
   }
 
-  function toggleLogs() {
+  async function toggleLogs() {
     logsOpen = !logsOpen;
     const panel = document.getElementById('logPanel');
     if (!panel) return;
     panel.classList.toggle('on', logsOpen);
-    if (logsOpen) renderLogs();
+    if (logsOpen) {
+      await fetchLogs();
+      renderLogs();
+    }
   }
 
-  function clearLogs() {
-    localStorage.removeItem(LOGS_KEY);
+  async function clearLogs() {
+    logsCache = [];
+    localStorage.removeItem(LOGS_FALLBACK);
+    updateLogBadge(0);
     renderLogs();
-    const badge = document.getElementById('logBadge');
-    if (badge) badge.style.display = 'none';
+    try {
+      await fetch(API, {
+        method: 'POST', redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'clearLogs' })
+      });
+    } catch {}
   }
 
   document.addEventListener('click', e => {
-    if (logsOpen && !e.target.closest('#logPanel') && !e.target.closest('#notifBtn')) {
+    if (logsOpen && !e.target.closest('#logPanel') && !e.target.closest('.notif-btn-wrap')) {
       logsOpen = false;
       const panel = document.getElementById('logPanel');
       if (panel) panel.classList.remove('on');
@@ -1928,8 +2004,14 @@
   function updateClearBtn() {
     const hasSearch = document.getElementById('searchInput').value.trim() !== '';
     const hasStatus = filterType !== 'TODOS';
-    const btn = document.getElementById('btnClear');
-    if (btn) btn.classList.toggle('visible', hasSearch || hasStatus);
+    const active = hasSearch || hasStatus;
+    // desktop inline
+    const btnD = document.getElementById('btnClear');
+    if (btnD) btnD.classList.toggle('visible', active);
+    // mobile row3
+    const row3 = document.getElementById('toolbarRow3');
+    const btnM = row3 ? row3.querySelector('.btn-clear') : null;
+    if (btnM) btnM.classList.toggle('visible', active);
   }
 
   /* ═══════════════════════════════════════════
@@ -2004,7 +2086,6 @@
       return 0;
     });
 
-    document.getElementById('contador').textContent = rows.length;
     document.getElementById('tfShowing').textContent = rows.length;
     document.getElementById('tfTotal').textContent = db.length;
 
@@ -2393,12 +2474,8 @@
     const saved = localStorage.getItem('cpj-theme');
     if (saved) document.documentElement.setAttribute('data-theme', saved);
 
-    /* Logs badge on load */
-    const initLogs = getLogs();
-    if (initLogs.length) {
-      const badge = document.getElementById('logBadge');
-      if (badge) { badge.style.display = 'flex'; badge.textContent = Math.min(99, initLogs.length); }
-    }
+    /* Logs: carrega do servidor na init */
+    fetchLogs();
 
     /* Mobile: força card view */
     if (window.innerWidth <= 640) {
