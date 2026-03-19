@@ -2123,7 +2123,7 @@
       const pf = c.pasta ? String(c.pasta) : '';
       let pctColor = 'var(--c-att)';
       if (pct = 0) pctColor = 'var(--c-ris)';
-      if (pct > 0) pctColor = 'var(--c-ok)';
+      if (pct >= 1) pctColor = 'var(--c-ok)';
 
       return `<tr onclick="openSmartPanel('VIEW','${esc(c.id)}')">
         <td class="center" data-label="PASTA"><span class="cell-pasta">${pf ? esc(pf) : D}</span></td>
